@@ -323,21 +323,112 @@
             <!-- Settings Section -->
             <div id="settings" class="section" style="display: none;">
                 <div class="content-section">
-                    <h3>University Settings</h3>
+                    <h3>University Profile & Settings</h3>
+                    
+                    <!-- Profile Section -->
+                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                        <h4>Profile Information</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center;">
+                            <div>
+                                <div id="profileAvatar" style="width: 80px; height: 80px; background: #667eea; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; margin-bottom: 1rem;">🏛️</div>
+                                <input type="file" id="avatarUpload" accept="image/*" style="display: none;">
+                                <button onclick="document.getElementById('avatarUpload').click()" class="btn-secondary" style="font-size: 0.8rem;">Change Avatar</button>
+                            </div>
+                            <div>
+                                <p><strong>Wallet Address:</strong> <span id="profileWallet">Loading...</span></p>
+                                <p><strong>Login Method:</strong> <span id="profileLoginMethod">Loading...</span></p>
+                                <p><strong>Member Since:</strong> <span id="profileMemberSince">2024</span></p>
+                                <p><strong>Certificates Issued:</strong> <span id="profileCertCount">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Settings Form -->
                     <form id="settingsForm" class="form">
-                        <div class="form-group">
-                            <label for="universityNameInput">University Name:</label>
-                            <input type="text" id="universityNameInput" placeholder="Enter university name">
+                        <!-- Basic Information -->
+                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                            <h4 style="margin-bottom: 1.5rem; color: #2d3748;">🏛️ Basic Information</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                                <div class="form-group">
+                                    <label for="universityNameInput">University Name:</label>
+                                    <input type="text" id="universityNameInput" placeholder="Enter university name" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="universityCode">University Code:</label>
+                                    <input type="text" id="universityCode" placeholder="e.g., MIT, VIT" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                                <div class="form-group">
+                                    <label for="universityEmail">Contact Email:</label>
+                                    <input type="email" id="universityEmail" placeholder="admin@university.edu" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="universityPhone">Phone Number:</label>
+                                    <input type="tel" id="universityPhone" placeholder="+1 (555) 123-4567" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                </div>
+                            </div>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1rem;">
+                                <div class="form-group">
+                                    <label for="universityWebsite">Website:</label>
+                                    <input type="url" id="universityWebsite" placeholder="https://university.edu" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="universityEstablished">Established Year:</label>
+                                    <input type="number" id="universityEstablished" placeholder="1950" min="1800" max="2024" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="universityAddress">Address:</label>
+                                <textarea id="universityAddress" placeholder="University address" rows="3" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; resize: vertical;"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="universityDescription">Description:</label>
+                                <textarea id="universityDescription" placeholder="Brief description of the university" rows="3" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px; resize: vertical;"></textarea>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="universityEmail">Contact Email:</label>
-                            <input type="email" id="universityEmail" placeholder="admin@university.edu">
+                        
+                        <!-- Security & Privacy Settings -->
+                        <div style="background: #f0fff4; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                            <h4 style="margin-bottom: 1.5rem; color: #2d3748;">🔒 Security & Privacy</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="enableNotifications" style="margin: 0;">
+                                        <span>📧 Email Notifications</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="enableTwoFactor" style="margin: 0;">
+                                        <span>🔐 Two-Factor Authentication</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="autoBackup" style="margin: 0;">
+                                        <span>💾 Auto Backup Settings</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="publicProfile" style="margin: 0;">
+                                        <span>👁️ Public Profile Visibility</span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="universityAddress">Address:</label>
-                            <textarea id="universityAddress" placeholder="University address"></textarea>
+                        
+                        <!-- Action Buttons -->
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; padding: 1rem; background: #f7fafc; border-radius: 8px;">
+                            <button type="submit" class="btn-primary" style="min-width: 150px;">✅ Update Settings</button>
+                            <button type="button" onclick="exportSettings()" class="btn-secondary" style="min-width: 150px;">📤 Export Settings</button>
+                            <button type="button" onclick="resetSettings()" class="btn-secondary" style="background: #e53e3e; min-width: 150px;">🔄 Reset to Default</button>
                         </div>
-                        <button type="submit" class="btn-primary">Update Settings</button>
                     </form>
                     <div id="settingsResult" class="result"></div>
                 </div>

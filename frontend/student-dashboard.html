@@ -184,6 +184,7 @@
                 <li><a href="#verify" onclick="showSection('verify')">🔍 Verify Certificate</a></li>
                 <li><a href="#qr-code" onclick="showSection('qr-code')">📱 My QR Code</a></li>
                 <li><a href="#achievements" onclick="showSection('achievements')">🏆 Achievements</a></li>
+                <li><a href="#settings" onclick="showSection('settings')">⚙️ Settings</a></li>
             </ul>
         </div>
         
@@ -243,28 +244,77 @@
             <!-- Profile Section -->
             <div id="profile" class="section" style="display: none;">
                 <div class="content-section">
-                    <h3>My Profile (Decentralized)</h3>
+                    <h3>Student Profile & Information</h3>
+                    
+                    <!-- Profile Section -->
+                    <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                        <h4>Profile Information</h4>
+                        <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1rem; align-items: center;">
+                            <div>
+                                <div id="studentProfileAvatar" style="width: 80px; height: 80px; background: #4299e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; margin-bottom: 1rem;">🎓</div>
+                                <input type="file" id="studentAvatarUpload" accept="image/*" style="display: none;">
+                                <button onclick="document.getElementById('studentAvatarUpload').click()" class="btn-secondary" style="font-size: 0.8rem;">Change Photo</button>
+                            </div>
+                            <div>
+                                <p><strong>Wallet Address:</strong> <span id="studentProfileWallet">Loading...</span></p>
+                                <p><strong>Login Method:</strong> <span id="studentProfileLoginMethod">Loading...</span></p>
+                                <p><strong>Member Since:</strong> <span id="studentProfileMemberSince">2024</span></p>
+                                <p><strong>Certificates Owned:</strong> <span id="studentProfileCertCount">0</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
                     <form id="profileForm" class="form">
-                        <div class="form-group">
-                            <label for="profileName">Full Name:</label>
-                            <input type="text" id="profileName" placeholder="Your full name">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="profileName">Full Name:</label>
+                                <input type="text" id="profileName" placeholder="Your full name">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileStudentId">Student ID:</label>
+                                <input type="text" id="profileStudentId" placeholder="e.g., 2024CS001">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="profileEmail">Email:</label>
-                            <input type="email" id="profileEmail" placeholder="your.email@example.com">
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="profileEmail">Email:</label>
+                                <input type="email" id="profileEmail" placeholder="your.email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePhone">Phone:</label>
+                                <input type="tel" id="profilePhone" placeholder="+1234567890">
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="profilePhone">Phone:</label>
-                            <input type="tel" id="profilePhone" placeholder="+1234567890">
+                        
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="profileDepartment">Department:</label>
+                                <input type="text" id="profileDepartment" placeholder="Computer Science">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileYear">Academic Year:</label>
+                                <select id="profileYear">
+                                    <option value="">Select Year</option>
+                                    <option value="1st Year">1st Year</option>
+                                    <option value="2nd Year">2nd Year</option>
+                                    <option value="3rd Year">3rd Year</option>
+                                    <option value="4th Year">4th Year</option>
+                                    <option value="Graduate">Graduate</option>
+                                </select>
+                            </div>
                         </div>
+                        
                         <div class="form-group">
                             <label for="profileAddress">Address:</label>
-                            <textarea id="profileAddress" placeholder="Your address"></textarea>
+                            <textarea id="profileAddress" placeholder="Your address" rows="3"></textarea>
                         </div>
+                        
                         <div class="form-group">
                             <label for="profileBio">Bio:</label>
-                            <textarea id="profileBio" placeholder="Tell us about yourself"></textarea>
+                            <textarea id="profileBio" placeholder="Tell us about yourself" rows="3"></textarea>
                         </div>
+                        
                         <button type="submit" class="btn-primary">Update Profile</button>
                     </form>
                     <div id="profileResult" class="result"></div>
@@ -333,6 +383,106 @@
                             <p>Completed your student profile</p>
                         </div>
                     </div>
+                </div>
+            </div>
+            
+            <!-- Settings Section -->
+            <div id="settings" class="section" style="display: none;">
+                <div class="content-section">
+                    <h3>Student Settings & Preferences</h3>
+                    
+                    <form id="settingsForm" class="form">
+                        <!-- Account Settings -->
+                        <div style="background: #f8f9fa; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                            <h4 style="margin-bottom: 1.5rem; color: #2d3748;">🔧 Account Settings</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                                <div class="form-group">
+                                    <label for="settingsLanguage">Language:</label>
+                                    <select id="settingsLanguage" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                        <option value="en">English</option>
+                                        <option value="es">Spanish</option>
+                                        <option value="fr">French</option>
+                                        <option value="de">German</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="settingsTimezone">Timezone:</label>
+                                    <select id="settingsTimezone" style="width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                        <option value="UTC">UTC</option>
+                                        <option value="EST">Eastern Time</option>
+                                        <option value="PST">Pacific Time</option>
+                                        <option value="GMT">GMT</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Privacy & Security Settings -->
+                        <div style="background: #f0fff4; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                            <h4 style="margin-bottom: 1.5rem; color: #2d3748;">🔒 Privacy & Security</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="enableStudentNotifications" style="margin: 0;">
+                                        <span>📧 Email Notifications</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="enableStudentTwoFactor" style="margin: 0;">
+                                        <span>🔐 Two-Factor Authentication</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="studentAutoBackup" style="margin: 0;">
+                                        <span>💾 Auto Backup Data</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="studentPublicProfile" style="margin: 0;">
+                                        <span>👁️ Public Profile Visibility</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Certificate Management -->
+                        <div style="background: #fff5f5; padding: 1.5rem; border-radius: 8px; margin-bottom: 2rem;">
+                            <h4 style="margin-bottom: 1.5rem; color: #2d3748;">📜 Certificate Management</h4>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="autoDownloadCerts" style="margin: 0;">
+                                        <span>⬇️ Auto-download Certificates</span>
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                        <input type="checkbox" id="shareWithEmployers" style="margin: 0;">
+                                        <span>🏢 Allow Employer Verification</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="defaultCertFormat" style="margin-bottom: 0.5rem; display: block; font-weight: 500;">Default Certificate Format:</label>
+                                <select id="defaultCertFormat" style="width: 100%; max-width: 300px; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 6px;">
+                                    <option value="pdf">📄 PDF Format</option>
+                                    <option value="json">📋 JSON Format</option>
+                                    <option value="both">📄📋 Both PDF & JSON</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; padding: 1rem; background: #f7fafc; border-radius: 8px;">
+                            <button type="submit" class="btn-primary" style="min-width: 150px;">✅ Update Settings</button>
+                            <button type="button" onclick="exportStudentSettings()" class="btn-secondary" style="min-width: 150px;">📤 Export Settings</button>
+                            <button type="button" onclick="resetStudentSettings()" class="btn-secondary" style="background: #e53e3e; min-width: 150px;">🔄 Reset to Default</button>
+                        </div>
+                    </form>
+                    <div id="settingsResult" class="result"></div>
                 </div>
             </div>
         </div>

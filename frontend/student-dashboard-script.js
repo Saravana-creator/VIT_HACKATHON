@@ -203,8 +203,11 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
     
     const profileData = {
         name: document.getElementById('profileName').value,
+        studentId: document.getElementById('profileStudentId').value,
         email: document.getElementById('profileEmail').value,
         phone: document.getElementById('profilePhone').value,
+        department: document.getElementById('profileDepartment').value,
+        year: document.getElementById('profileYear').value,
         address: document.getElementById('profileAddress').value,
         bio: document.getElementById('profileBio').value,
         walletAddress: userWallet || 'demo-student',
@@ -213,37 +216,74 @@ document.getElementById('profileForm').addEventListener('submit', async (e) => {
 
     try {
         showResult('profileResult', 'Updating profile...', true);
-        
-        const response = await fetch('/api/profile/update', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(profileData)
-        });
-
-        const result = await response.json();
-
-        if (result.success) {
-            showResult('profileResult', 
-                `Profile updated successfully! Transaction: ${result.transactionHash}`, 
-                true
-            );
-            localStorage.setItem('userProfile', JSON.stringify(profileData));
-            updateProfileStatus();
-        } else {
-            showResult('profileResult', `Error: ${result.error}`, false);
-        }
-    } catch (error) {
-        // Fallback to local storage
         localStorage.setItem('userProfile', JSON.stringify(profileData));
-        showResult('profileResult', 
-            'Profile saved locally. Your data is stored securely on your device.', 
-            true
-        );
+        showResult('profileResult', 'Profile updated successfully!', true);
         updateProfileStatus();
+        updateStudentProfileDisplay();
+    } catch (error) {
+        showResult('profileResult', `Error: ${error.message}`, false);
     }
 });
+
+// Update Settings
+document.getElementById('settingsForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const settingsData = {
+        language: document.getElementById('settingsLanguage').value,
+        timezone: document.getElementById('settingsTimezone').value,
+        enableNotifications: document.getElementById('enableStudentNotifications').checked,
+        enableTwoFactor: document.getElementById('enableStudentTwoFactor').checked,
+        autoBackup: document.getElementById('studentAutoBackup').checked,
+        publicProfile: document.getElementById('studentPublicProfile').checked,
+        autoDownloadCerts: document.getElementById('autoDownloadCerts').checked,
+        shareWithEmployers: document.getElementById('shareWithEmployers').checked,
+        defaultCertFormat: document.getElementById('defaultCertFormat').value,
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        showResult('settingsResult', 'Updating settings...', true);
+        localStorage.setItem('studentSettings', JSON.stringify(settingsData));
+        showResult('settingsResult', 'Settings updated successfully!', true);
+    } catch (error) {
+        showResult('settingsResult', `Error: ${error.message}`, false);
+    }
+});
+
+// Export Student Settings
+function exportStudentSettings() {
+    const settings = localStorage.getItem('studentSettings');
+    if (!settings) {
+        alert('No settings to export');
+        return;
+    }
+    
+    const blob = new Blob([settings], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `student_settings_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// Reset Student Settings
+function resetStudentSettings() {
+    if (confirm('Are you sure you want to reset all settings to default? This cannot be undone.')) {
+        localStorage.removeItem('studentSettings');
+        document.getElementById('settingsForm').reset();
+        showResult('settingsResult', 'Settings reset to default', true);
+    }
+}
+
+// Update Student Profile Display
+function updateStudentProfileDisplay() {
+    document.getElementById('studentProfileWallet').textContent = userWallet ? 
+        `${userWallet.substring(0, 6)}...${userWallet.substring(38)}` : 'Not connected';
+    document.getElementById('studentProfileLoginMethod').textContent = loginMethod || 'Credentials';
+    document.getElementById('studentProfileCertCount').textContent = localStorage.getItem('studentCertificates') || '0';
+}
 
 // Verify Certificate
 async function verifyCertificate() {
@@ -340,14 +380,63 @@ document.addEventListener('DOMContentLoaded', () => {
         const profile = JSON.parse(savedProfile);
         document.getElementById('studentName').textContent = profile.name || 'Student';
         document.getElementById('profileName').value = profile.name || '';
+        document.getElementById('profileStudentId').value = profile.studentId || '';
         document.getElementById('profileEmail').value = profile.email || '';
         document.getElementById('profilePhone').value = profile.phone || '';
+        document.getElementById('profileDepartment').value = profile.department || '';
+        document.getElementById('profileYear').value = profile.year || '';
         document.getElementById('profileAddress').value = profile.address || '';
         document.getElementById('profileBio').value = profile.bio || '';
         updateProfileStatus();
     }
     
+    // Load saved settings
+    const savedSettings = localStorage.getItem('studentSettings');
+    if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        document.getElementById('settingsLanguage').value = settings.language || 'en';
+        document.getElementById('settingsTimezone').value = settings.timezone || 'UTC';
+        document.getElementById('enableStudentNotifications').checked = settings.enableNotifications || false;
+        document.getElementById('enableStudentTwoFactor').checked = settings.enableTwoFactor || false;
+        document.getElementById('studentAutoBackup').checked = settings.autoBackup || false;
+        document.getElementById('studentPublicProfile').checked = settings.publicProfile || false;
+        document.getElementById('autoDownloadCerts').checked = settings.autoDownloadCerts || false;
+        document.getElementById('shareWithEmployers').checked = settings.shareWithEmployers || false;
+        document.getElementById('defaultCertFormat').value = settings.defaultCertFormat || 'pdf';
+    }
+    
+    // Load avatar
+    const savedAvatar = localStorage.getItem('studentAvatar');
+    if (savedAvatar) {
+        const avatar = document.getElementById('studentProfileAvatar');
+        avatar.style.backgroundImage = `url(${savedAvatar})`;
+        avatar.style.backgroundSize = 'cover';
+        avatar.style.backgroundPosition = 'center';
+        avatar.textContent = '';
+    }
+    
+    // Update profile display
+    updateStudentProfileDisplay();
+    
     // Load certificate count
     const certCount = localStorage.getItem('studentCertificates') || 0;
     document.getElementById('certificateCount').textContent = `${certCount} certificate${certCount !== 1 ? 's' : ''}`;
+    
+    // Avatar upload handler
+    document.getElementById('studentAvatarUpload').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const avatar = document.getElementById('studentProfileAvatar');
+                avatar.style.backgroundImage = `url(${e.target.result})`;
+                avatar.style.backgroundSize = 'cover';
+                avatar.style.backgroundPosition = 'center';
+                avatar.textContent = '';
+                
+                localStorage.setItem('studentAvatar', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 });

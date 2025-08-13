@@ -461,8 +461,17 @@ document.getElementById('settingsForm').addEventListener('submit', async (e) => 
     
     const settingsData = {
         name: document.getElementById('universityNameInput').value,
+        code: document.getElementById('universityCode').value,
         email: document.getElementById('universityEmail').value,
+        phone: document.getElementById('universityPhone').value,
         address: document.getElementById('universityAddress').value,
+        website: document.getElementById('universityWebsite').value,
+        established: document.getElementById('universityEstablished').value,
+        description: document.getElementById('universityDescription').value,
+        enableNotifications: document.getElementById('enableNotifications').checked,
+        enableTwoFactor: document.getElementById('enableTwoFactor').checked,
+        autoBackup: document.getElementById('autoBackup').checked,
+        publicProfile: document.getElementById('publicProfile').checked,
         wallet: userWallet,
         timestamp: new Date().toISOString()
     };
@@ -477,9 +486,66 @@ document.getElementById('settingsForm').addEventListener('submit', async (e) => 
         
         // Update display
         document.getElementById('universityName').textContent = settingsData.name || 'University Admin';
+        updateProfileDisplay();
     } catch (error) {
         showResult('settingsResult', `Error: ${error.message}`, false);
     }
+});
+
+// Export Settings
+function exportSettings() {
+    const settings = localStorage.getItem('universitySettings');
+    if (!settings) {
+        alert('No settings to export');
+        return;
+    }
+    
+    const blob = new Blob([settings], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `university_settings_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+}
+
+// Reset Settings
+function resetSettings() {
+    if (confirm('Are you sure you want to reset all settings to default? This cannot be undone.')) {
+        localStorage.removeItem('universitySettings');
+        document.getElementById('settingsForm').reset();
+        showResult('settingsResult', 'Settings reset to default', true);
+        updateProfileDisplay();
+    }
+}
+
+// Update Profile Display
+function updateProfileDisplay() {
+    document.getElementById('profileWallet').textContent = userWallet ? 
+        `${userWallet.substring(0, 6)}...${userWallet.substring(38)}` : 'Not connected';
+    document.getElementById('profileLoginMethod').textContent = loginMethod || 'Credentials';
+    document.getElementById('profileCertCount').textContent = localStorage.getItem('totalCertificates') || '0';
+}
+
+// Handle Avatar Upload
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('avatarUpload').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const avatar = document.getElementById('profileAvatar');
+                avatar.style.backgroundImage = `url(${e.target.result})`;
+                avatar.style.backgroundSize = 'cover';
+                avatar.style.backgroundPosition = 'center';
+                avatar.textContent = '';
+                
+                // Save avatar to localStorage
+                localStorage.setItem('universityAvatar', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    });
 });
 
 // Update statistics
@@ -513,10 +579,36 @@ document.addEventListener('DOMContentLoaded', () => {
     if (savedSettings) {
         const settings = JSON.parse(savedSettings);
         document.getElementById('universityName').textContent = settings.name || 'University Admin';
+        
+        // Populate form fields
         document.getElementById('universityNameInput').value = settings.name || '';
+        document.getElementById('universityCode').value = settings.code || '';
         document.getElementById('universityEmail').value = settings.email || '';
+        document.getElementById('universityPhone').value = settings.phone || '';
         document.getElementById('universityAddress').value = settings.address || '';
+        document.getElementById('universityWebsite').value = settings.website || '';
+        document.getElementById('universityEstablished').value = settings.established || '';
+        document.getElementById('universityDescription').value = settings.description || '';
+        
+        // Set checkboxes
+        document.getElementById('enableNotifications').checked = settings.enableNotifications || false;
+        document.getElementById('enableTwoFactor').checked = settings.enableTwoFactor || false;
+        document.getElementById('autoBackup').checked = settings.autoBackup || false;
+        document.getElementById('publicProfile').checked = settings.publicProfile || false;
     }
+    
+    // Load avatar
+    const savedAvatar = localStorage.getItem('universityAvatar');
+    if (savedAvatar) {
+        const avatar = document.getElementById('profileAvatar');
+        avatar.style.backgroundImage = `url(${savedAvatar})`;
+        avatar.style.backgroundSize = 'cover';
+        avatar.style.backgroundPosition = 'center';
+        avatar.textContent = '';
+    }
+    
+    // Update profile display
+    updateProfileDisplay();
     
     // Load stats
     const totalCerts = localStorage.getItem('totalCertificates') || 0;
@@ -526,5 +618,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const degreeHashInput = document.getElementById('degreeHash');
     degreeHashInput.addEventListener('dblclick', () => {
         degreeHashInput.value = generateSampleHash();
+    });
+    
+    // Avatar upload handler
+    document.getElementById('avatarUpload').addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const avatar = document.getElementById('profileAvatar');
+                avatar.style.backgroundImage = `url(${e.target.result})`;
+                avatar.style.backgroundSize = 'cover';
+                avatar.style.backgroundPosition = 'center';
+                avatar.textContent = '';
+                
+                localStorage.setItem('universityAvatar', e.target.result);
+            };
+            reader.readAsDataURL(file);
+        }
     });
 });
