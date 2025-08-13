@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Generator - EduChain</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .generator-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        .generator-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .generator-header h1 {
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+        }
+        
+        .generator-area {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: #f8f9fa;
+        }
+        
+        #qr-display {
+            width: 100%;
+            max-width: 300px;
+            margin: 0 auto 1rem;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        
+        .generate-btn {
+            background: #48bb78;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0.5rem;
+            transition: all 0.3s;
+        }
+        
+        .generate-btn:hover {
+            background: #38a169;
+            transform: translateY(-2px);
+        }
+        
+        .download-btn {
+            background: #4299e1;
+        }
+        
+        .download-btn:hover {
+            background: #3182ce;
+        }
+        
+        .back-link {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+        
+        .back-link:hover {
+            opacity: 1;
+        }
+        
+        .scan-result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .scan-success {
+            background: #f0fff4;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        
+        .scan-error {
+            background: #fed7d7;
+            color: #742a2a;
+            border: 1px solid #feb2b2;
+        }
+    </style>
+</head>
+<body>
+    <a href="javascript:history.back()" class="back-link">← Back</a>
+    
+    <div class="generator-container">
+        <div class="generator-header">
+            <h1>📱 QR Code Generator</h1>
+            <p>Generate random QR codes for testing and verification</p>
+        </div>
+        
+        <div class="generator-area">
+            <div id="qr-display"></div>
+            <div id="qr-info" style="margin-bottom: 1rem; color: #718096;">Click "Generate Random QR" to create a new QR code</div>
+            <div>
+                <button class="generate-btn" onclick="generateRandomQR()">Generate Random QR</button>
+                <button class="generate-btn" onclick="toggleAutoGeneration()" id="auto-btn">Stop Auto Generate</button>
+                <button class="generate-btn download-btn" onclick="downloadQR()" id="download-btn" style="display: none;">Download QR</button>
+            </div>
+        </div>
+        
+        <div id="generate-result"></div>
+    </div>
+
+    <script>
+        let currentQRData = null;
+
+        function generateRandomQR() {
+            const randomData = {
+                id: Math.random().toString(36).substr(2, 9),
+                type: Math.random() > 0.5 ? 'student' : 'university',
+                name: generateRandomName(),
+                email: generateRandomEmail(),
+                timestamp: new Date().toISOString(),
+                wallet: '0x' + Math.random().toString(16).substr(2, 40),
+                department: generateRandomDepartment()
+            };
+            
+            currentQRData = JSON.stringify(randomData);
+            
+            try {
+                const qr = qrcode(0, 'M');
+                qr.addData(currentQRData);
+                qr.make();
+                
+                document.getElementById('qr-display').innerHTML = qr.createImgTag(4);
+                showGenerateResult('✅ Random QR code generated successfully!', 'success');
+                document.getElementById('qr-info').textContent = `Generated: ${randomData.type} - ${randomData.name}`;
+                document.getElementById('download-btn').style.display = 'inline-block';
+            } catch (error) {
+                showGenerateResult('❌ Failed to generate QR code', 'error');
+            }
+        }
+
+        function downloadQR() {
+            if (!currentQRData) return;
+            
+            const img = document.querySelector('#qr-display img');
+            if (img) {
+                const link = document.createElement('a');
+                link.download = `qr-code-${Date.now()}.png`;
+                link.href = img.src;
+                link.click();
+                showGenerateResult('⬇️ QR code downloaded!', 'success');
+            }
+        }
+
+        function generateRandomName() {
+            const firstNames = ['John', 'Jane', 'Alex', 'Sarah', 'Mike', 'Emma', 'David', 'Lisa', 'Chris', 'Anna'];
+            const lastNames = ['Smith', 'Johnson', 'Brown', 'Davis', 'Wilson', 'Miller', 'Taylor', 'Anderson', 'Thomas', 'Jackson'];
+            return firstNames[Math.floor(Math.random() * firstNames.length)] + ' ' + 
+                   lastNames[Math.floor(Math.random() * lastNames.length)];
+        }
+
+        function generateRandomEmail() {
+            const domains = ['university.edu', 'college.edu', 'student.edu', 'school.edu'];
+            const name = Math.random().toString(36).substr(2, 8);
+            return name + '@' + domains[Math.floor(Math.random() * domains.length)];
+        }
+
+        function generateRandomDepartment() {
+            const departments = ['Computer Science', 'Engineering', 'Business', 'Medicine', 'Arts', 'Science', 'Mathematics', 'Physics', 'Chemistry', 'Biology'];
+            return departments[Math.floor(Math.random() * departments.length)];
+        }
+
+        function showGenerateResult(message, type) {
+            const resultDiv = document.getElementById('generate-result');
+            resultDiv.textContent = message;
+            resultDiv.className = `scan-result scan-${type}`;
+            resultDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                resultDiv.style.display = 'none';
+            }, 3000);
+        }
+
+        // Auto-generate QR codes
+        let autoGenerate = true;
+        
+        function startAutoGeneration() {
+            generateRandomQR();
+            if (autoGenerate) {
+                setTimeout(startAutoGeneration, 3000); // Generate new QR every 3 seconds
+            }
+        }
+        
+        function toggleAutoGeneration() {
+            autoGenerate = !autoGenerate;
+            const btn = document.getElementById('auto-btn');
+            if (autoGenerate) {
+                btn.textContent = 'Stop Auto Generate';
+                btn.style.background = '#e53e3e';
+                startAutoGeneration();
+            } else {
+                btn.textContent = 'Start Auto Generate';
+                btn.style.background = '#48bb78';
+            }
+        }
+        
+        window.addEventListener('load', () => {
+            startAutoGeneration();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - EduChain</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+    <style>
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            background: #2d3748;
+            color: white;
+            padding: 2rem 0;
+        }
+        
+        .sidebar-header {
+            padding: 0 1.5rem 2rem;
+            border-bottom: 1px solid #4a5568;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 1rem 0;
+        }
+        
+        .sidebar-menu li {
+            margin: 0.5rem 0;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: #cbd5e0;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: #4a5568;
+            color: white;
+        }
+        
+        .main-content {
+            background: #f7fafc;
+            padding: 2rem;
+        }
+        
+        .header {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            background: #4299e1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+        
+        .content-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .qr-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .certificate-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+        
+        .certificate-preview {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .certificate-preview:hover {
+            border-color: #4299e1;
+            transform: translateY(-2px);
+        }
+        
+        .logout-btn {
+            background: #e53e3e;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .logout-btn:hover {
+            background: #c53030;
+        }
+        
+        .info-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            z-index: 1000;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 999;
+        }
+        
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>🎓 Student Portal</h2>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#dashboard" class="active" onclick="showSection('dashboard')">📊 Dashboard</a></li>
+                <li><a href="#certificates" onclick="showSection('certificates')">📜 My Certificates</a></li>
+                <li><a href="#profile" onclick="showSection('profile')">👤 My Profile</a></li>
+                <li><a href="#verify" onclick="showSection('verify')">🔍 Verify Certificate</a></li>
+                <li><a href="#qr-code" onclick="showSection('qr-code')">📱 My QR Code</a></li>
+                <li><a href="#achievements" onclick="showSection('achievements')">🏆 Achievements</a></li>
+            </ul>
+        </div>
+        
+        <div class="main-content">
+            <div class="header">
+                <div class="user-info">
+                    <div class="user-avatar">🎓</div>
+                    <div>
+                        <h3 id="studentName">Student</h3>
+                        <p id="studentWallet" style="color: #718096; font-size: 0.9rem;">Loading...</p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+            
+            <!-- Dashboard Section -->
+            <div id="dashboard" class="section active">
+                <div class="certificate-grid">
+                    <div class="certificate-preview">
+                        <h4>📜 My Certificates</h4>
+                        <p id="certificateCount">0 certificates</p>
+                        <button onclick="showSection('certificates')" class="btn-primary">View All</button>
+                    </div>
+                    <div class="certificate-preview">
+                        <h4>👤 Profile Status</h4>
+                        <p id="profileStatus">Complete your profile</p>
+                        <button onclick="showSection('profile')" class="btn-secondary">Update Profile</button>
+                    </div>
+                    <div class="certificate-preview">
+                        <h4>📱 QR Code</h4>
+                        <p>Share your student ID</p>
+                        <button onclick="showSection('qr-code')" class="btn-secondary">Generate QR</button>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Recent Activity</h3>
+                    <div id="recentActivity">
+                        <p>No recent activity</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Certificates Section -->
+            <div id="certificates" class="section" style="display: none;">
+                <div class="content-section">
+                    <h3>My Certificates</h3>
+                    <div class="form-group">
+                        <label for="tokenId">Certificate Token ID:</label>
+                        <input type="number" id="tokenId" placeholder="Enter your token ID">
+                        <button onclick="viewMyCertificate()" class="btn-primary">View Certificate</button>
+                    </div>
+                    <div id="certificateResult" class="result"></div>
+                </div>
+            </div>
+            
+            <!-- Profile Section -->
+            <div id="profile" class="section" style="display: none;">
+                <div class="content-section">
+                    <h3>My Profile (Decentralized)</h3>
+                    <form id="profileForm" class="form">
+                        <div class="form-group">
+                            <label for="profileName">Full Name:</label>
+                            <input type="text" id="profileName" placeholder="Your full name">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileEmail">Email:</label>
+                            <input type="email" id="profileEmail" placeholder="your.email@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="profilePhone">Phone:</label>
+                            <input type="tel" id="profilePhone" placeholder="+1234567890">
+                        </div>
+                        <div class="form-group">
+                            <label for="profileAddress">Address:</label>
+                            <textarea id="profileAddress" placeholder="Your address"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="profileBio">Bio:</label>
+                            <textarea id="profileBio" placeholder="Tell us about yourself"></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Update Profile</button>
+                    </form>
+                    <div id="profileResult" class="result"></div>
+                </div>
+            </div>
+            
+            <!-- Verify Section -->
+            <div id="verify" class="section" style="display: none;">
+                <div class="content-section">
+                    <h3>Verify Any Certificate</h3>
+                    <div class="form-group">
+                        <label for="verifyTokenId">Certificate Token ID:</label>
+                        <input type="number" id="verifyTokenId" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="verifyHash">Degree Hash (optional):</label>
+                        <input type="text" id="verifyHash">
+                    </div>
+                    <button onclick="verifyCertificate()" class="btn-primary">Verify Certificate</button>
+                    <div id="verifyResult" class="result"></div>
+                </div>
+            </div>
+            
+            <!-- QR Code Section -->
+            <div id="qr-code" class="section" style="display: none;">
+                <div class="content-section">
+                    <h3>Student QR Code</h3>
+                    <form id="studentQrInfoForm" class="form" style="margin-bottom: 2rem;">
+                        <div class="form-group">
+                            <label for="studentQrEmail">Email:</label>
+                            <input type="email" id="studentQrEmail" placeholder="student@email.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentQrUsername">Username:</label>
+                            <input type="text" id="studentQrUsername" placeholder="Student Name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="studentQrDepartment">Department:</label>
+                            <input type="text" id="studentQrDepartment" placeholder="Computer Science" required>
+                        </div>
+                        <button type="button" onclick="generateStudentQRWithInfo()" class="btn-primary">Generate QR Code</button>
+                    </form>
+                    <div class="qr-section">
+                        <div id="studentQR" style="margin: 1rem 0;"></div>
+                        <button onclick="downloadQR()" class="btn-secondary" style="display: none;" id="studentDownloadBtn">Download QR Code</button>
+                        <a href="qr-scanner.html" class="btn-secondary" style="display: inline-block; text-decoration: none; margin-left: 1rem;">📱 Scan QR Code</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Achievements Section -->
+            <div id="achievements" class="section" style="display: none;">
+                <div class="content-section">
+                    <h3>My Achievements</h3>
+                    <div class="certificate-grid">
+                        <div class="certificate-preview">
+                            <h4>🏆 First Certificate</h4>
+                            <p>Earned your first blockchain certificate</p>
+                        </div>
+                        <div class="certificate-preview">
+                            <h4>📱 QR Code Generated</h4>
+                            <p>Created your student QR code</p>
+                        </div>
+                        <div class="certificate-preview">
+                            <h4>✅ Profile Complete</h4>
+                            <p>Completed your student profile</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="student-dashboard-script.js"></script>
+</body>
+</html>

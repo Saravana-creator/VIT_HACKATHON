@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EduChain</title>
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            background: #F4F6F8;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .header-bar {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            right: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .back-home {
+            color: #1B2A4E;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .back-home:hover {
+            color: #E0B84B;
+        }
+        
+        .language-select {
+            padding: 0.5rem 1rem;
+            border: 2px solid #1B2A4E;
+            border-radius: 6px;
+            background: white;
+            color: #1B2A4E;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .language-select:hover {
+            border-color: #E0B84B;
+            background: #F4F6F8;
+        }
+        
+        .main-container {
+            display: flex;
+            justify-content: center;
+            max-width: 900px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        .login-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(27, 42, 78, 0.12);
+            overflow: hidden;
+            width: 100%;
+        }
+        
+        .login-header {
+            background: #1B2A4E;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            color: #E0B84B;
+        }
+        
+        .logo-text {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .login-header h2 {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-content {
+            padding: 2rem;
+        }
+        
+        .form-toggle {
+            display: flex;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #E5E7EB;
+        }
+        
+        .toggle-btn {
+            flex: 1;
+            padding: 0.75rem;
+            background: #F9FAFB;
+            color: #6B7280;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .toggle-btn.active {
+            background: #1B2A4E;
+            color: white;
+        }
+        
+        .toggle-btn:hover:not(.active) {
+            background: #E5E7EB;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #1B2A4E;
+            font-weight: 500;
+        }
+        
+        .form-group select,
+        .form-group input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #E5E7EB;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #1B2A4E;
+            box-shadow: 0 0 0 3px rgba(27, 42, 78, 0.1);
+        }
+        
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #1B2A4E;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .login-btn:hover {
+            background: #152139;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(27, 42, 78, 0.3);
+        }
+        
+        .metamask-btn {
+            width: 100%;
+            padding: 1rem;
+            background: #E0B84B;
+            color: #1B2A4E;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .metamask-btn:hover {
+            background: #D4A843;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(224, 184, 75, 0.3);
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            color: #6B7280;
+            position: relative;
+        }
+        
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: #E5E7EB;
+        }
+        
+        .divider span {
+            background: white;
+            padding: 0 1rem;
+            font-size: 0.9rem;
+        }
+        
+
+        
+        .result {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .success {
+            background: #ECFDF5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+        }
+        
+        .error {
+            background: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+        
+        @media (max-width: 1024px) {
+            .main-container {
+                max-width: 600px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                max-width: 100%;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            body {
+                padding: 1rem;
+            }
+            
+            .header-bar {
+                top: 1rem;
+                left: 1rem;
+                right: 1rem;
+            }
+            
+            .login-content {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">
+        <a href="home.html" class="back-home">
+            <span>←</span>
+            <span>Back to Home</span>
+        </a>
+        
+        <select class="language-select" onchange="changeLanguage(this.value)">
+            <option value="en">English</option>
+            <option value="ta">தமிழ்</option>
+            <option value="hi">हिंदी</option>
+        </select>
+    </div>
+    
+    <div class="main-container">
+        <div class="login-section">
+            <div class="login-header">
+                <div class="logo">
+                    <span class="logo-icon">🎓</span>
+                    <span class="logo-text">EduChain</span>
+                </div>
+                <h2 id="formTitle">Login / Sign In</h2>
+                <p id="formSubtitle">Access your portal account</p>
+            </div>
+            
+            <div class="login-content">
+                <div class="form-toggle">
+                    <button type="button" class="toggle-btn active" onclick="showLogin()">Login</button>
+                    <button type="button" class="toggle-btn" onclick="showSignup()">Sign In</button>
+                </div>
+                
+                <form id="loginForm" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Select Role</label>
+                        <select id="userRole" required>
+                            <option value="">Choose your role</option>
+                            <option value="university">University</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="email" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn" id="submitBtn">Sign In</button>
+                </form>
+                
+                <form id="signupForm" onsubmit="handleSignup(event)" style="display: none;">
+                    <div class="form-group">
+                        <label>Select Role</label>
+                        <select id="signupRole" required>
+                            <option value="">Choose your role</option>
+                            <option value="university">University</option>
+                            <option value="student">Student</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" placeholder="Enter your full name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="signupEmail" placeholder="Enter your email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="Create a password" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" id="confirmPassword" placeholder="Confirm your password" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">Create Account</button>
+                </form>
+                
+                <div class="divider"><span>OR</span></div>
+                
+                <button class="metamask-btn" onclick="loginWithMetaMask()">
+                    <span>🦊</span>
+                    <span>Sign in with MetaMask</span>
+                </button>
+                
+                <div id="loginResult" class="result" style="display: none;"></div>
+            </div>
+        </div>
+        
+
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const role = document.getElementById('userRole').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (!role) {
+                showResult('❌ Please select your role', false);
+                return;
+            }
+            
+            showResult('🔐 Authenticating...', true);
+            
+            setTimeout(() => {
+                // Check if user exists in registered users
+                const users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                const user = users.find(u => u.email === email && u.password === password && u.role === role);
+                
+                if (user) {
+                    localStorage.setItem('userRole', role);
+                    localStorage.setItem('userEmail', email);
+                    localStorage.setItem('userName', user.name);
+                    localStorage.setItem('loginMethod', 'credentials');
+                    
+                    showResult('✅ Login successful', true);
+                    
+                    setTimeout(() => {
+                        try {
+                            if (role === 'university') {
+                                window.location.href = 'university-dashboard.html';
+                            } else {
+                                window.location.href = 'student-dashboard.html';
+                            }
+                        } catch (error) {
+                            showResult('❌ Navigation error: ' + error.message, false);
+                        }
+                    }, 1000);
+                } else {
+                    showResult('❌ Invalid credentials or role mismatch', false);
+                }
+            }, 1500);
+        }
+
+        async function loginWithMetaMask() {
+            // Get role from whichever form is currently visible
+            const loginForm = document.getElementById('loginForm');
+            const signupForm = document.getElementById('signupForm');
+            
+            let role = '';
+            if (loginForm.style.display !== 'none') {
+                role = document.getElementById('userRole').value;
+            } else {
+                role = document.getElementById('signupRole').value;
+            }
+            
+            if (!role) {
+                showResult('❌ Please select your role first', false);
+                return;
+            }
+            
+            if (typeof window.ethereum === 'undefined') {
+                showResult('❌ MetaMask not found', false);
+                return;
+            }
+
+            try {
+                showResult('🔗 Connecting to MetaMask...', true);
+                
+                const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+                if (accounts.length > 0) {
+                    const walletAddress = accounts[0];
+                    localStorage.setItem('userRole', role);
+                    localStorage.setItem('userWallet', walletAddress);
+                    localStorage.setItem('loginMethod', 'metamask');
+                    
+                    showResult('✅ MetaMask connected successfully', true);
+                    
+                    setTimeout(() => {
+                        try {
+                            if (role === 'university') {
+                                window.location.href = 'university-dashboard.html';
+                            } else {
+                                window.location.href = 'student-dashboard.html';
+                            }
+                        } catch (error) {
+                            showResult('❌ Navigation error: ' + error.message, false);
+                        }
+                    }, 1000);
+                }
+            } catch (error) {
+                showResult('❌ Connection failed', false);
+            }
+        }
+
+
+
+        function changeLanguage(lang) {
+            console.log('Language changed to:', lang);
+        }
+
+        function showLogin() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+            document.getElementById('formTitle').textContent = 'Login / Sign In';
+            document.getElementById('formSubtitle').textContent = 'Access your portal account';
+            
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.toggle-btn')[0].classList.add('active');
+        }
+        
+        function showSignup() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+            document.getElementById('formTitle').textContent = 'Sign In';
+            document.getElementById('formSubtitle').textContent = 'Join the EduChain platform';
+            
+            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+        
+        function handleSignup(event) {
+            event.preventDefault();
+            
+            const role = document.getElementById('signupRole').value;
+            const fullName = document.getElementById('fullName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!role) {
+                showResult('❌ Please select your role', false);
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                showResult('❌ Passwords do not match', false);
+                return;
+            }
+            
+            showResult('📝 Creating account...', true);
+            
+            setTimeout(() => {
+                // Store user data for validation during login
+                const userData = {
+                    role: role,
+                    email: email,
+                    name: fullName,
+                    password: password
+                };
+                
+                // Store in localStorage for demo purposes (in real app, this would be sent to server)
+                let users = JSON.parse(localStorage.getItem('registeredUsers') || '[]');
+                users.push(userData);
+                localStorage.setItem('registeredUsers', JSON.stringify(users));
+                
+                showResult('✅ Account created successfully! Please login.', true);
+                
+                setTimeout(() => {
+                    // Switch to login form
+                    showLogin();
+                    // Clear signup form
+                    document.getElementById('signupForm').reset();
+                }, 2000);
+            }, 1500);
+        }
+        
+        function showResult(message, isSuccess = true) {
+            console.log('Login result:', message, 'Success:', isSuccess);
+            const resultElement = document.getElementById('loginResult');
+            resultElement.textContent = message;
+            resultElement.className = `result ${isSuccess ? 'success' : 'error'}`;
+            resultElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

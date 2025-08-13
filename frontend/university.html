@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University Portal - NFT Credentials</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1>🏛️ University Portal</h1>
+            <div class="nav-links">
+                <button onclick="showSection('issue')" class="nav-btn">Issue Certificate</button>
+                <button onclick="showSection('view-students')" class="nav-btn">View Students</button>
+                <button onclick="showSection('verify')" class="nav-btn">Verify Certificate</button>
+                <button onclick="logout()" class="nav-btn" style="background-color: #e53e3e;">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div id="walletStatus" class="result" style="display: none;"></div>
+
+        <!-- Issue Certificate Section -->
+        <section id="issue" class="section active">
+            <h2>Issue Degree Certificate</h2>
+            <form id="issueForm" class="form">
+                <div class="form-group">
+                    <label for="studentAddress">Student Wallet Address:</label>
+                    <input type="text" id="studentAddress" placeholder="0x..." required>
+                </div>
+                <div class="form-group">
+                    <label for="studentName">Student Name:</label>
+                    <input type="text" id="studentName" required>
+                </div>
+                <div class="form-group">
+                    <label for="course">Course/Degree:</label>
+                    <input type="text" id="course" required>
+                </div>
+                <div class="form-group">
+                    <label for="graduationDate">Graduation Date:</label>
+                    <input type="date" id="graduationDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="degreeHash">Degree Hash:</label>
+                    <input type="text" id="degreeHash" placeholder="Double-click to generate" required>
+                </div>
+                <button type="submit" class="btn-primary">Issue Certificate</button>
+            </form>
+            <div id="issueResult" class="result"></div>
+        </section>
+
+        <!-- View Students Section -->
+        <section id="view-students" class="section">
+            <h2>Student Records (Read-Only)</h2>
+            <div class="form-group">
+                <label for="searchTokenId">Search by Token ID:</label>
+                <input type="number" id="searchTokenId" placeholder="Enter token ID">
+                <button onclick="viewStudentRecord()" class="btn-secondary">Search</button>
+            </div>
+            <div id="studentRecords" class="result"></div>
+        </section>
+
+        <!-- Verify Section -->
+        <section id="verify" class="section">
+            <h2>Verify Certificate</h2>
+            <div class="form-group">
+                <label for="verifyTokenId">Certificate Token ID:</label>
+                <input type="number" id="verifyTokenId" required>
+            </div>
+            <div class="form-group">
+                <label for="verifyHash">Degree Hash (optional):</label>
+                <input type="text" id="verifyHash">
+            </div>
+            <button onclick="verifyCertificate()" class="btn-primary">Verify Certificate</button>
+            <div id="verifyResult" class="result"></div>
+        </section>
+    </div>
+
+    <script src="university-script.js"></script>
+</body>
+</html>

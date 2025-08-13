@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Information - EduChain</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .user-card {
+            background: white;
+            border-radius: 20px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .user-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 1.5rem;
+            color: white;
+        }
+        
+        .university-avatar {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+        }
+        
+        .student-avatar {
+            background: linear-gradient(45deg, #4299e1, #3182ce);
+        }
+        
+        .user-title {
+            font-size: 2rem;
+            color: #2d3748;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+        
+        .user-subtitle {
+            color: #718096;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .info-grid {
+            display: grid;
+            gap: 1rem;
+            text-align: left;
+            margin: 2rem 0;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: #f7fafc;
+            border-radius: 12px;
+            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        
+        .info-item:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+        
+        .info-icon {
+            margin-right: 1rem;
+            font-size: 1.5rem;
+            width: 30px;
+            text-align: center;
+        }
+        
+        .info-content {
+            flex: 1;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .info-value {
+            color: #2d3748;
+            font-size: 1rem;
+            word-break: break-all;
+        }
+        
+        .verified-badge {
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: 1rem 0;
+            display: inline-block;
+        }
+        
+        .timestamp {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .back-btn {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+        .back-btn:hover {
+            background: #5a67d8;
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: #e53e3e;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .logo {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            opacity: 0.9;
+        }
+        
+        .logo:hover {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <a href="home.html" class="logo">🎓 EduChain</a>
+    
+    <div class="user-card" id="userCard">
+        <div id="loading">
+            <p>Loading user information...</p>
+        </div>
+    </div>
+
+    <script>
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function displayUserInfo(userData) {
+            const isUniversity = userData.type === 'university';
+            const avatarClass = isUniversity ? 'university-avatar' : 'student-avatar';
+            const avatarIcon = isUniversity ? '🏛️' : '🎓';
+            const userType = isUniversity ? 'University' : 'Student';
+            
+            const userCard = document.getElementById('userCard');
+            userCard.innerHTML = `
+                <div class="user-avatar ${avatarClass}">${avatarIcon}</div>
+                <h1 class="user-title">${userData.username || userData.name || 'User'}</h1>
+                <p class="user-subtitle">${userType} Information</p>
+                <div class="verified-badge">✅ Verified ${userType}</div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <span class="info-icon">📧</span>
+                        <div class="info-content">
+                            <div class="info-label">Email Address</div>
+                            <div class="info-value">${userData.email || 'Not provided'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">🏢</span>
+                        <div class="info-content">
+                            <div class="info-label">Department</div>
+                            <div class="info-value">${userData.department || 'Not specified'}</div>
+                        </div>
+                    </div>
+                    
+                    ${userData.studentId ? `
+                    <div class="info-item">
+                        <span class="info-icon">🆔</span>
+                        <div class="info-content">
+                            <div class="info-label">Student ID</div>
+                            <div class="info-value">${userData.studentId}</div>
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    <div class="info-item">
+                        <span class="info-icon">💳</span>
+                        <div class="info-content">
+                            <div class="info-label">Blockchain Wallet</div>
+                            <div class="info-value">${userData.wallet || 'Not connected'}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <span class="info-icon">🔐</span>
+                        <div class="info-content">
+                            <div class="info-label">Authentication Method</div>
+                            <div class="info-value">${userData.loginMethod === 'metamask' ? 'MetaMask Wallet' : 'Email & Password'}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timestamp">
+                    🕒 Generated: ${new Date(userData.timestamp).toLocaleString()}
+                </div>
+                
+                <a href="home.html" class="back-btn">← Back to Home</a>
+            `;
+        }
+
+        function showError(message) {
+            const userCard = document.getElementById('userCard');
+            userCard.innerHTML = `
+                <div class="error-message">
+                    <h2>❌ Error</h2>
+                    <p>${message}</p>
+                    <a href="home.html" class="back-btn">← Back to Home</a>
+                </div>
+            `;
+        }
+
+        // Load and display user data
+        try {
+            const encodedData = getQueryParam('data');
+            if (!encodedData) {
+                throw new Error('No user data found in QR code');
+            }
+            
+            const decodedData = atob(encodedData);
+            const userData = JSON.parse(decodedData);
+            
+            displayUserInfo(userData);
+            
+        } catch (error) {
+            console.error('Error loading user data:', error);
+            showError('Invalid or corrupted QR code data. Please try scanning again.');
+        }
+    </script>
+</body>
+</html>
