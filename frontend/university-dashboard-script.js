@@ -154,6 +154,148 @@ function downloadQR() {
     }
 }
 
+// Download Certificate as PDF
+function downloadCertificatePDF() {
+    const tokenId = document.getElementById('searchTokenId').value;
+    
+    if (!tokenId) {
+        alert('Please search for a certificate first');
+        return;
+    }
+    
+    // Get certificate data from the displayed record
+    const recordElement = document.getElementById('studentRecords');
+    if (!recordElement.innerHTML.includes('Student Record')) {
+        alert('Please search for a certificate first');
+        return;
+    }
+    
+    // Extract data from displayed record
+    const spans = recordElement.querySelectorAll('span');
+    if (spans.length < 6) {
+        alert('Certificate data not found');
+        return;
+    }
+    
+    const certificateData = {
+        tokenId: spans[0].textContent,
+        studentName: spans[1].textContent,
+        course: spans[2].textContent,
+        graduationDate: spans[3].textContent,
+        university: spans[4].textContent,
+        studentWallet: spans[5].textContent,
+        degreeHash: spans[6].textContent
+    };
+    
+    generateCertificatePDF(certificateData);
+}
+
+// Generate PDF Certificate
+function generateCertificatePDF(data) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    
+    // Border
+    doc.setLineWidth(2);
+    doc.rect(10, 10, 190, 277);
+    
+    // Header
+    doc.setFontSize(28);
+    doc.setFont(undefined, 'bold');
+    doc.text('CERTIFICATE OF COMPLETION', 105, 40, { align: 'center' });
+    
+    // University
+    doc.setFontSize(18);
+    doc.setFont(undefined, 'normal');
+    doc.text('EduChain University', 105, 60, { align: 'center' });
+    
+    // Decorative line
+    doc.setLineWidth(0.5);
+    doc.line(30, 70, 180, 70);
+    
+    // Certificate body
+    doc.setFontSize(14);
+    doc.text('This is to certify that', 105, 90, { align: 'center' });
+    
+    // Student name
+    doc.setFontSize(24);
+    doc.setFont(undefined, 'bold');
+    doc.text(data.studentName.toUpperCase(), 105, 115, { align: 'center' });
+    
+    // Course text
+    doc.setFontSize(14);
+    doc.setFont(undefined, 'normal');
+    doc.text('has successfully completed the academic program', 105, 135, { align: 'center' });
+    
+    // Course name
+    doc.setFontSize(20);
+    doc.setFont(undefined, 'bold');
+    doc.text(data.course, 105, 155, { align: 'center' });
+    
+    // Date
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Conferred on: ${data.graduationDate}`, 105, 175, { align: 'center' });
+    
+    // Line
+    doc.line(30, 185, 180, 185);
+    
+    // Verification section
+    doc.setFontSize(12);
+    doc.setFont(undefined, 'bold');
+    doc.text('BLOCKCHAIN VERIFICATION', 105, 200, { align: 'center' });
+    
+    doc.setFontSize(10);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Certificate ID: ${data.tokenId}`, 25, 215);
+    doc.text(`University: ${data.university.substring(0, 25)}...`, 25, 225);
+    doc.text(`Student: ${data.studentWallet.substring(0, 25)}...`, 25, 235);
+    doc.text(`Hash: ${data.degreeHash.substring(0, 35)}...`, 25, 245);
+    
+    // Footer
+    doc.setFontSize(8);
+    doc.text('This certificate is cryptographically secured on the blockchain', 105, 265, { align: 'center' });
+    doc.text(`Generated: ${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`, 105, 275, { align: 'center' });
+    
+    doc.save(`${data.studentName}_Certificate_${data.tokenId}.pdf`);
+}
+
+// Download Verified Certificate as PDF
+function downloadVerifiedCertificatePDF() {
+    const tokenId = document.getElementById('verifyTokenId').value;
+    
+    if (!tokenId) {
+        alert('Please verify a certificate first');
+        return;
+    }
+    
+    // Get certificate data from the displayed record
+    const recordElement = document.getElementById('verifyResult');
+    if (!recordElement.innerHTML.includes('Certificate Details')) {
+        alert('Please verify a certificate first');
+        return;
+    }
+    
+    // Extract data from displayed record
+    const spans = recordElement.querySelectorAll('span');
+    if (spans.length < 6) {
+        alert('Certificate data not found');
+        return;
+    }
+    
+    const certificateData = {
+        tokenId: spans[0].textContent,
+        studentName: spans[1].textContent,
+        course: spans[2].textContent,
+        graduationDate: spans[3].textContent,
+        university: spans[4].textContent,
+        studentWallet: spans[5].textContent,
+        degreeHash: spans[6].textContent
+    };
+    
+    generateCertificatePDF(certificateData);
+}
+
 // Issue Certificate
 document.getElementById('issueForm').addEventListener('submit', async (e) => {
     e.preventDefault();

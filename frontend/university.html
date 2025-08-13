@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Portal - NFT Credentials</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -74,6 +75,7 @@
                 <input type="text" id="verifyHash">
             </div>
             <button onclick="verifyCertificate()" class="btn-primary">Verify Certificate</button>
+            <button onclick="downloadVerifiedPDF()" class="btn-secondary" style="margin-left: 10px;">📄 Download PDF</button>
             <div id="verifyResult" class="result"></div>
         </section>
     </div>
