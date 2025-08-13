@@ -1,7 +1,13 @@
 const { ethers } = require("hardhat");
 
 async function main() {
-  const [deployer] = await ethers.getSigners();
+  const signers = await ethers.getSigners();
+  
+  if (signers.length === 0) {
+    throw new Error("No signers available. Check your PRIVATE_KEY in .env file.");
+  }
+  
+  const deployer = signers[0];
   console.log("Deploying contracts with account:", deployer.address);
 
   const CredentialNFT = await ethers.getContractFactory("CredentialNFT");

@@ -8,6 +8,12 @@ if (localStorage.getItem('userRole') !== 'university') {
     window.location.href = 'login.html';
 }
 
+// If no wallet address (credential login), use the deployer address from contract deployment
+if (!userWallet || !userWallet.startsWith('0x')) {
+    userWallet = '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'; // Default test address
+    localStorage.setItem('userWallet', userWallet);
+}
+
 // Navigation
 function showSection(sectionName) {
     // Update sidebar active state
@@ -158,7 +164,7 @@ document.getElementById('issueForm').addEventListener('submit', async (e) => {
         course: document.getElementById('course').value,
         graduationDate: document.getElementById('graduationDate').value,
         degreeHash: document.getElementById('degreeHash').value,
-        universityAddress: userWallet || 'demo-university'
+        universityAddress: userWallet || '0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266'
     };
 
     if (userWallet && !isValidEthereumAddress(formData.studentAddress)) {
