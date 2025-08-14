@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EduChain - Digital Academic Credentials Platform</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Crimson+Text:wght@400;600;700&family=Cormorant+Garamond:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         :root {
@@ -23,9 +23,10 @@
         }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Cormorant Garamond', serif;
             line-height: 1.6;
             color: var(--dark-gray);
+            font-weight: 400;
         }
         
         .header {
@@ -62,7 +63,8 @@
         .logo-text {
             font-family: 'Playfair Display', serif;
             font-size: 1.8rem;
-            font-weight: 700;
+            font-weight: 900;
+            letter-spacing: 1px;
         }
         
         .nav {
@@ -74,7 +76,9 @@
         .nav-link {
             color: var(--white);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            font-family: 'Crimson Text', serif;
+            letter-spacing: 0.5px;
             transition: color 0.3s;
         }
         
@@ -119,15 +123,19 @@
         .hero h1 {
             font-family: 'Playfair Display', serif;
             font-size: 3.5rem;
-            font-weight: 700;
+            font-weight: 900;
             margin-bottom: 1.5rem;
             line-height: 1.2;
+            letter-spacing: 2px;
         }
         
         .hero p {
             font-size: 1.3rem;
             margin-bottom: 2.5rem;
             opacity: 0.9;
+            font-family: 'Crimson Text', serif;
+            font-weight: 400;
+            letter-spacing: 0.5px;
         }
         
         .cta-button {
@@ -165,6 +173,8 @@
             text-align: center;
             margin-bottom: 3rem;
             color: var(--black);
+            font-weight: 700;
+            letter-spacing: 1.5px;
         }
         
         .features-grid {
@@ -198,11 +208,15 @@
             font-size: 1.5rem;
             margin-bottom: 1rem;
             color: var(--black);
+            font-weight: 700;
+            letter-spacing: 1px;
         }
         
         .feature-card p {
             color: var(--text-gray);
             line-height: 1.7;
+            font-family: 'Crimson Text', serif;
+            font-weight: 400;
         }
         
         .footer {
@@ -223,6 +237,8 @@
             font-size: 1.3rem;
             margin-bottom: 1rem;
             color: var(--white);
+            font-weight: 700;
+            letter-spacing: 1px;
         }
         
         .footer-section p, .footer-section a {
@@ -230,6 +246,7 @@
             text-decoration: none;
             margin-bottom: 0.5rem;
             display: block;
+            font-family: 'Crimson Text', serif;
         }
         
         .footer-section a:hover {
@@ -243,6 +260,139 @@
             color: rgba(255,255,255,0.8);
         }
         
+        /* Chatbot Styles */
+        .chatbot-widget {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: var(--black);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        
+        .chatbot-widget:hover {
+            transform: scale(1.1);
+        }
+        
+        .chatbot-widget.active {
+            background: var(--dark-gray);
+        }
+        
+        .chatbot-icon {
+            color: var(--white);
+            font-size: 24px;
+        }
+        
+        .chatbot-panel {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 350px;
+            height: 450px;
+            background: var(--white);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .chatbot-header {
+            background: var(--black);
+            color: var(--white);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .chatbot-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .chatbot-close {
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 18px;
+            cursor: pointer;
+        }
+        
+        .chatbot-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .message {
+            max-width: 80%;
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .message.bot {
+            background: var(--light-gray);
+            color: var(--dark-gray);
+            align-self: flex-start;
+        }
+        
+        .message.user {
+            background: var(--black);
+            color: var(--white);
+            align-self: flex-end;
+        }
+        
+        .chatbot-input {
+            padding: 15px;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+        
+        .chatbot-send {
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: var(--light-gray);
+            padding: 10px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
@@ -254,6 +404,11 @@
             
             .features-grid {
                 grid-template-columns: 1fr;
+            }
+            
+            .chatbot-panel {
+                width: 300px;
+                height: 400px;
             }
         }
     </style>
@@ -309,6 +464,25 @@
         </div>
     </section>
 
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget" onclick="toggleChatbot()">
+        <span class="chatbot-icon">🤖</span>
+    </div>
+    
+    <div class="chatbot-panel" id="chatbotPanel">
+        <div class="chatbot-header">
+            <span class="chatbot-title">EduChain Assistant</span>
+            <button class="chatbot-close" onclick="toggleChatbot()">×</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+        </div>
+        <div class="typing-indicator" id="typingIndicator">Assistant is typing...</div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="Ask me anything..." onkeypress="handleKeyPress(event)">
+            <button class="chatbot-send" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    
     <footer class="footer" id="contact">
         <div class="container">
             <div class="footer-content">
@@ -341,5 +515,247 @@
             </div>
         </div>
     </footer>
+    <script>
+        let chatbotOpen = false;
+        
+        function toggleChatbot() {
+            const panel = document.getElementById('chatbotPanel');
+            const widget = document.querySelector('.chatbot-widget');
+            
+            chatbotOpen = !chatbotOpen;
+            
+            if (chatbotOpen) {
+                panel.style.display = 'flex';
+                widget.classList.add('active');
+            } else {
+                panel.style.display = 'none';
+                widget.classList.remove('active');
+            }
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('chatbotInput');
+            const messages = document.getElementById('chatbotMessages');
+            const typing = document.getElementById('typingIndicator');
+            
+            const userMessage = input.value.trim();
+            if (!userMessage) return;
+            
+            // Add user message
+            const userDiv = document.createElement('div');
+            userDiv.className = 'message user';
+            userDiv.textContent = userMessage;
+            messages.appendChild(userDiv);
+            
+            input.value = '';
+            messages.scrollTop = messages.scrollHeight;
+            
+            // Show typing indicator
+            typing.style.display = 'block';
+            messages.scrollTop = messages.scrollHeight;
+            
+            try {
+                // Call Grok API (replace with your actual API key)
+                const response = await fetch('https://api.x.ai/v1/chat/completions', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer YOUR_GROK_API_KEY_HERE' // Replace with actual key
+                    },
+                    body: JSON.stringify({
+                        messages: [
+                            {
+                                role: 'system',
+                                content: 'You are a helpful assistant for EduChain, a blockchain-based academic credential verification platform. Help users understand how the platform works, its benefits, and guide them through using it. Keep responses concise and friendly.'
+                            },
+                            {
+                                role: 'user',
+                                content: userMessage
+                            }
+                        ],
+                        model: 'grok-beta',
+                        stream: false,
+                        temperature: 0.7
+                    })
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    const botResponse = data.choices[0].message.content;
+                    
+                    // Hide typing indicator
+                    typing.style.display = 'none';
+                    
+                    // Add bot response
+                    const botDiv = document.createElement('div');
+                    botDiv.className = 'message bot';
+                    botDiv.textContent = botResponse;
+                    messages.appendChild(botDiv);
+                } else {
+                    throw new Error('API request failed');
+                }
+            } catch (error) {
+                console.error('Chatbot error:', error);
+                
+                // Hide typing indicator
+                typing.style.display = 'none';
+                
+                // Fallback response
+                const botDiv = document.createElement('div');
+                botDiv.className = 'message bot';
+                botDiv.textContent = getFallbackResponse(userMessage);
+                messages.appendChild(botDiv);
+            }
+            
+            messages.scrollTop = messages.scrollHeight;
+        }
+        
+        function getFallbackResponse(message) {
+            const lowerMessage = message.toLowerCase();
+            
+            // Handle greetings
+            if (lowerMessage.includes('hi') || lowerMessage.includes('hello') || lowerMessage.includes('hey')) {
+                return 'Hi, how can I help you?';
+            }
+            
+            // Handle how are you
+            if (lowerMessage.includes('how are you')) {
+                return 'I\'m doing well, thank you! How can I help you with EduChain?';
+            }
+            
+            // Handle identity questions
+            if (lowerMessage.includes('who are you') || lowerMessage.includes('what are you') || lowerMessage.includes('who is this')) {
+                return 'I am the EduChain Assistant.';
+            }
+            
+            // Handle website questions
+            if (lowerMessage.includes('what is this website') || lowerMessage.includes('what is this site') || lowerMessage.includes('what is educhain') || lowerMessage.includes('what is this website about')) {
+                return 'EduChain is a blockchain-based digital academic credentials platform. It allows universities to issue secure, verifiable certificates as NFTs and enables students to access, share, and verify their academic credentials globally.';
+            }
+            
+            // Handle any website-related questions
+            
+            // Login instructions
+            if (lowerMessage.includes('login') || lowerMessage.includes('log in') || lowerMessage.includes('sign in')) {
+                return 'To login to EduChain: 1) Click "Portal Login" on the homepage 2) Choose your role (Student or University) 3) Select login method: MetaMask wallet, email/password, or demo mode 4) For MetaMask: connect your wallet 5) For email: enter credentials 6) For demo: use provided test accounts. Need help with a specific step?';
+            }
+            
+            // Platform features and functionality
+            if (lowerMessage.includes('feature') || lowerMessage.includes('what can') || lowerMessage.includes('what does')) {
+                return 'EduChain offers: 1) Institutional Management - tools for universities to issue and manage credentials 2) Student Portal - secure access to view and share certificates 3) Blockchain Security - tamper-proof credential storage 4) Global Verification - instant verification by employers worldwide 5) PDF Downloads - downloadable certificate copies 6) QR Code generation for easy sharing.';
+            }
+            
+            // Student portal questions
+            if (lowerMessage.includes('student portal') || lowerMessage.includes('student dashboard')) {
+                return 'The Student Portal allows you to: view your certificates, download PDF copies, generate QR codes for sharing, manage your profile, update settings, verify certificate authenticity, and access your academic records securely. Login with your wallet or university credentials to get started.';
+            }
+            
+            // University portal questions
+            if (lowerMessage.includes('university portal') || lowerMessage.includes('university dashboard')) {
+                return 'The University Portal enables institutions to: issue new certificates as NFTs, manage student records, verify existing certificates, view analytics and statistics, generate QR codes, manage university profile and settings, and authorize other universities. Contact support to set up your institution.';
+            }
+            
+            // Certificate/credential questions
+            if (lowerMessage.includes('certificate') || lowerMessage.includes('credential') || lowerMessage.includes('degree')) {
+                return 'EduChain certificates are blockchain-based NFTs that contain: student name, course/degree information, graduation date, university details, unique token ID, and cryptographic hash for verification. They are tamper-proof, instantly verifiable, downloadable as PDFs, and globally recognized by employers and institutions.';
+            }
+            
+            // Blockchain and security
+            if (lowerMessage.includes('blockchain') || lowerMessage.includes('security') || lowerMessage.includes('safe') || lowerMessage.includes('secure')) {
+                return 'EduChain uses Ethereum blockchain technology for maximum security. Your credentials are: stored as immutable NFTs, protected by cryptographic hashing, verified through smart contracts, tamper-proof and permanent, accessible only by authorized parties, and backed by decentralized blockchain infrastructure ensuring 99.9% uptime.';
+            }
+            
+            // Verification process
+            if (lowerMessage.includes('verify') || lowerMessage.includes('verification') || lowerMessage.includes('authentic')) {
+                return 'To verify a certificate: 1) Enter the Token ID in the verification portal 2) Optionally provide the degree hash for additional security 3) The system checks blockchain records instantly 4) Results show certificate details, issuing university, student information, and authenticity status. Employers can verify credentials in seconds.';
+            }
+            
+            // QR Code functionality
+            if (lowerMessage.includes('qr') || lowerMessage.includes('qr code') || lowerMessage.includes('scan')) {
+                return 'QR codes in EduChain: 1) Students can generate personal QR codes with their information 2) Universities can create institutional QR codes 3) QR codes link to verification pages 4) Scannable with any camera app or QR scanner 5) Downloadable for sharing 6) Contains encrypted user data for security.';
+            }
+            
+            // PDF and download features
+            if (lowerMessage.includes('pdf') || lowerMessage.includes('download') || lowerMessage.includes('print')) {
+                return 'EduChain provides PDF downloads for: certificates with official formatting, QR codes for easy sharing, verification reports, student transcripts, and university documentation. All PDFs include blockchain verification links and are professionally formatted for employers and institutions.';
+            }
+            
+            // Profile and settings
+            if (lowerMessage.includes('profile') || lowerMessage.includes('settings') || lowerMessage.includes('account')) {
+                return 'Manage your EduChain profile: update personal information, change notification preferences, enable two-factor authentication, set privacy controls, export your data, backup settings, customize dashboard, and manage security options. All changes are saved securely and sync across devices.';
+            }
+            
+            // Contact and support
+            if (lowerMessage.includes('contact') || lowerMessage.includes('support') || lowerMessage.includes('help') || lowerMessage.includes('email') || lowerMessage.includes('phone')) {
+                return 'Contact EduChain Support: Email: support@educhain.edu, Phone: +1 (555) 123-4567, Address: 123 University Ave, Education City. We also offer: Help Center, Documentation, Technical Support, and System Status updates. Our team responds within 24 hours.';
+            }
+            
+            // Pricing and costs
+            if (lowerMessage.includes('price') || lowerMessage.includes('cost') || lowerMessage.includes('fee') || lowerMessage.includes('payment')) {
+                return 'EduChain pricing: Students access their credentials for free. Universities pay per certificate issued. Demo accounts are completely free. Blockchain transaction fees (gas fees) apply for mainnet usage. Contact our sales team for institutional pricing and volume discounts.';
+            }
+            
+            // Technical questions
+            if (lowerMessage.includes('metamask') || lowerMessage.includes('wallet') || lowerMessage.includes('ethereum') || lowerMessage.includes('nft')) {
+                return 'EduChain technical details: Built on Ethereum blockchain, certificates are ERC-721 NFTs, supports MetaMask and other Web3 wallets, uses Sepolia testnet for testing, requires small gas fees for transactions, and provides both testnet and mainnet deployment options.';
+            }
+            
+            // Getting started
+            if (lowerMessage.includes('start') || lowerMessage.includes('begin') || lowerMessage.includes('first time') || lowerMessage.includes('new user')) {
+                return 'Getting started with EduChain: 1) Visit the homepage 2) Click "Portal Login" 3) Choose Student or University 4) Try demo mode first 5) For real use, connect MetaMask wallet 6) Students: enter your Token ID to view certificates 7) Universities: contact support for setup. Demo accounts let you explore all features risk-free.';
+            }
+            
+            // Dashboard and navigation questions
+            if (lowerMessage.includes('dashboard') || lowerMessage.includes('navigation') || lowerMessage.includes('menu')) {
+                return 'EduChain dashboards include: Student Dashboard (view certificates, profile, QR codes, settings), University Dashboard (issue certificates, manage students, analytics, verification), sidebar navigation with sections, user profile management, logout functionality, and responsive design for all devices.';
+            }
+            
+            // Token ID and certificate management
+            if (lowerMessage.includes('token') || lowerMessage.includes('token id') || lowerMessage.includes('certificate id')) {
+                return 'Token IDs are unique identifiers for each certificate NFT. Students receive Token IDs when certificates are issued. Use Token ID to: view your certificate, verify authenticity, share with employers, download PDF copies. Token IDs are permanent blockchain identifiers that cannot be changed or duplicated.';
+            }
+            
+            // Smart contracts and deployment
+            if (lowerMessage.includes('smart contract') || lowerMessage.includes('deploy') || lowerMessage.includes('compile')) {
+                return 'EduChain smart contracts: Written in Solidity, deployed on Ethereum, handle certificate minting and verification, store credential data on-chain, manage university authorization, provide tamper-proof storage. Deployment process: compile contracts, deploy to testnet/mainnet, verify on blockchain explorer.';
+            }
+            
+            // API and backend questions
+            if (lowerMessage.includes('api') || lowerMessage.includes('backend') || lowerMessage.includes('server')) {
+                return 'EduChain API endpoints: POST /api/credentials/mint (issue certificates), GET /api/credentials/verify/:tokenId (get certificate details), POST /api/credentials/verify-hash (verify degree hash), POST /api/universities/authorize (add authorized university). Built with Node.js and Express.';
+            }
+            
+            // Environment and configuration
+            if (lowerMessage.includes('environment') || lowerMessage.includes('config') || lowerMessage.includes('.env')) {
+                return 'EduChain configuration requires: SEPOLIA_RPC_URL (Infura/Alchemy endpoint), PRIVATE_KEY (wallet private key), CONTRACT_ADDRESS (deployed contract address), PORT (server port, default 3000). Store sensitive data in .env file for security.';
+            }
+            
+            // Installation and setup
+            if (lowerMessage.includes('install') || lowerMessage.includes('setup') || lowerMessage.includes('npm')) {
+                return 'EduChain installation: 1) npm install (install dependencies) 2) Configure .env file 3) npm run compile (compile smart contracts) 4) npm run deploy (deploy to blockchain) 5) npm start (start server) 6) Visit http://localhost:3000. Requires Node.js and npm.';
+            }
+            
+            // Testing and troubleshooting
+            if (lowerMessage.includes('test') || lowerMessage.includes('error') || lowerMessage.includes('troubleshoot') || lowerMessage.includes('debug')) {
+                return 'Common EduChain issues: "Contract not deployed" - run npm run deploy first, "Insufficient funds" - add Sepolia ETH to wallet, "Invalid address" - use proper Ethereum format (0x...), "Network error" - check RPC URL and internet. Use Sepolia faucet for test ETH.';
+            }
+            
+            // File structure and project organization
+            if (lowerMessage.includes('file') || lowerMessage.includes('folder') || lowerMessage.includes('structure') || lowerMessage.includes('project')) {
+                return 'EduChain project structure: frontend/ (HTML, CSS, JavaScript), backend/ (Node.js Express API), contracts/ (Solidity smart contracts), scripts/ (deployment scripts), package.json (dependencies), .env (configuration), README.md (documentation).';
+            }
+            
+            // Default comprehensive response
+            else {
+                return 'I can answer any question about the EduChain website including: platform features, login process, student/university dashboards, certificate management, blockchain technology, smart contracts, API endpoints, installation, configuration, testing, troubleshooting, file structure, and all website functionality. What specific aspect would you like to know about?';
+            }
+        }
+    </script>
 </body>
 </html>

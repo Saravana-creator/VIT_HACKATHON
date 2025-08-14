@@ -3,8 +3,420 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Portal - NFT Credentials</title>
+    <title>Student Portal - EduChain</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        :root {
+            --black: #000000;
+            --dark-gray: #1a1a1a;
+            --gray: #666666;
+            --light-gray: #f5f5f5;
+            --white: #ffffff;
+            --text-gray: #666666;
+            --primary-gradient: linear-gradient(135deg, #1a1a1a 0%, #000000 100%);
+            --secondary-gradient: linear-gradient(135deg, #666666 0%, #1a1a1a 100%);
+            --accent-gradient: linear-gradient(135deg, #f5f5f5 0%, #666666 100%);
+            --glass-bg: rgba(255, 255, 255, 0.25);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --shadow-light: 0 8px 32px 0 rgba(0, 0, 0, 0.15);
+            --shadow-heavy: 0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07);
+            --text-primary: #000000;
+            --text-secondary: #000000;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--white) 0%, var(--light-gray) 50%, #e0e0e0 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .navbar {
+            background: var(--black);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            color: var(--white);
+            font-weight: 700;
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        .nav-btn {
+            background: var(--white);
+            color: var(--black);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s;
+        }
+        
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+        
+        .nav-btn:hover {
+            background: var(--light-gray);
+            transform: translateY(-2px);
+        }
+        
+        .nav-btn.active {
+            background: var(--dark-gray);
+            color: var(--white);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: var(--shadow-light);
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+        
+        .section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 25px 25px 0 0;
+        }
+        
+        .section h2 {
+            color: #000000;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .section h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+        
+        .form {
+            display: grid;
+            gap: 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .form-group {
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.75rem;
+            color: #000000;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1.25rem;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--dark-gray);
+            box-shadow: 0 0 0 4px rgba(26, 26, 26, 0.1);
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(26, 26, 26, 0.4);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.6s;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 12px 35px rgba(26, 26, 26, 0.6);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        
+        .result {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            border-radius: 15px;
+            font-weight: 600;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: none;
+            animation: resultSlideIn 0.3s ease;
+        }
+        
+        @keyframes resultSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result.success {
+            background: rgba(245, 245, 245, 0.8);
+            color: var(--dark-gray);
+            border-color: rgba(102, 102, 102, 0.4);
+        }
+        
+        .result.error {
+            background: rgba(102, 102, 102, 0.2);
+            color: var(--dark-gray);
+            border-color: rgba(102, 102, 102, 0.4);
+        }
+        
+        .certificate-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: var(--shadow-light);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .certificate-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--secondary-gradient);
+            border-radius: 20px 20px 0 0;
+        }
+        
+        .certificate-card h3 {
+            color: #000000;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .certificate-info {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .certificate-info p {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-gradient);
+        }
+        
+        .certificate-info strong {
+            color: #000000;
+            font-weight: 600;
+        }
+        
+        .certificate-info span {
+            color: #000000;
+            font-weight: 500;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .container {
+                padding: 2rem 1rem;
+            }
+            
+            .section {
+                padding: 2rem 1.5rem;
+            }
+            
+            .section h2 {
+                font-size: 1.5rem;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
@@ -74,6 +486,7 @@
                 <input type="text" id="verifyHash">
             </div>
             <button onclick="verifyCertificate()" class="btn-primary">Verify Certificate</button>
+            <button onclick="downloadVerifiedPDF()" class="btn-primary" style="margin-left: 1rem; background: var(--secondary-gradient);">📄 Download PDF</button>
             <div id="verifyResult" class="result"></div>
         </section>
     </div>
